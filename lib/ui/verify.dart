@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'widget/custom_button.dart';
+import '../widget/custom_button.dart';
 
 class Verify extends StatelessWidget {
   const Verify({super.key});
@@ -14,7 +14,7 @@ class Verify extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.width / .87,
+              height: MediaQuery.of(context).size.width / .98,
               width: MediaQuery.of(context).size.width,
               child: Image.asset(
                 "assets/images/splashimage.jpg",
@@ -98,7 +98,9 @@ class Verify extends StatelessWidget {
                   ),
                   CustomButton(
                     text: "Next",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/Home');
+                    },
                   ),
                 ],
               ),
