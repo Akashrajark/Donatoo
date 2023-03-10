@@ -26,8 +26,10 @@ class ImageTextBox extends StatelessWidget {
           ),
           child: Text(
             title,
-            style: const TextStyle(
-                color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+            style: Theme.of(context)
+                .textTheme
+                .headlineMedium!
+                .copyWith(color: Colors.white),
           ),
         ),
       ],

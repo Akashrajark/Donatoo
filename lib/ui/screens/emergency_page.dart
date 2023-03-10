@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../widget/custom_emergency_card.dart';
 import '../widget/image_tex_box.dart';
 
 class Emergency extends StatelessWidget {
@@ -13,6 +13,10 @@ class Emergency extends StatelessWidget {
           ImageTextBox(
             image: "assets/images/Emergency.jpg",
             title: "Emergency",
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: EmergencyCard(),
           ),
         ],
       ),
