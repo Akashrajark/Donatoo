@@ -1,3 +1,4 @@
+import 'package:donatoo/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,15 +18,15 @@ class CustomButton extends StatelessWidget {
       child: Container(
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2),
-          color: Colors.blue,
+          borderRadius: BorderRadius.circular(10),
+          color: primaryColor,
         ),
         padding: const EdgeInsets.all(13),
         child: Text(
           text,
           textAlign: TextAlign.center,
           style: GoogleFonts.roboto(
-            textStyle: Theme.of(context).textTheme.subtitle1,
+            textStyle: Theme.of(context).textTheme.titleLarge,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),

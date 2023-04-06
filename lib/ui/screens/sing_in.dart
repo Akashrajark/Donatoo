@@ -1,3 +1,4 @@
+import 'package:donatoo/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,6 +10,7 @@ class SingIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: secondaryColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -39,9 +41,9 @@ class SingIn extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  "Enter your phone number",
+                  "Enter your email and password",
                   style: GoogleFonts.roboto(
-                    textStyle: Theme.of(context).textTheme.subtitle1,
+                    textStyle: Theme.of(context).textTheme.bodyLarge,
                     fontWeight: FontWeight.bold,
                     color: Colors.black38,
                   ),
@@ -49,57 +51,32 @@ class SingIn extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Expanded(
-                      flex: 2,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black26,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black26,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                        ),
-                      ),
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: "Email",
+                    hintStyle: GoogleFonts.roboto(
+                      textStyle:
+                          Theme.of(context).textTheme.titleMedium!.copyWith(
+                                color: secondaryColor,
+                                fontWeight: FontWeight.w500,
+                              ),
                     ),
-                    SizedBox(
-                      width: 10,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: "Password",
+                    hintStyle: GoogleFonts.roboto(
+                      textStyle:
+                          Theme.of(context).textTheme.titleMedium!.copyWith(
+                                color: secondaryColor,
+                                fontWeight: FontWeight.w500,
+                              ),
                     ),
-                    Expanded(
-                      flex: 6,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black26,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black26,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 const SizedBox(
                   height: 10,

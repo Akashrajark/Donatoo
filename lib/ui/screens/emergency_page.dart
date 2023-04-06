@@ -7,19 +7,17 @@ class Emergency extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: const [
-          ImageTextBox(
-            image: "assets/images/Emergency.jpg",
-            title: "Emergency",
-          ),
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: EmergencyCard(),
-          ),
-        ],
-      ),
+    return Column(
+      children: const [
+        ImageTextBox(
+          image: "assets/images/Emergency.jpg",
+          title: "Emergency",
+        ),
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: EmergencyCard(),
+        ),
+      ],
     );
   }
 }

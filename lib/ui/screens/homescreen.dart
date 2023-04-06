@@ -1,4 +1,7 @@
+import 'package:donatoo/ui/screens/profile_screen.dart';
+import 'package:donatoo/values/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'emergency_page.dart';
 import 'organization_page.dart';
 import 'request_page.dart';
@@ -16,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -26,14 +29,16 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: TabBarView(
-        controller: _tabController,
-        children: const [
-          Emergency(),
-          Organization(),
-          Request(),
-          Request(),
-        ],
+      backgroundColor: secondaryColor,
+      body: SafeArea(
+        child: TabBarView(
+          controller: _tabController,
+          children: const [
+            Emergency(),
+            Organization(),
+            Request(),
+          ],
+        ),
       ),
       bottomNavigationBar: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -66,9 +71,11 @@ class _HomeScreenState extends State<HomeScreen>
             iconData: Icons.account_box_outlined,
             text: "profile",
             onTap: () {
-              _tabController.animateTo(3);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ProfileScreen()));
             },
-            isActive: _tabController.index == 3,
           ),
         ],
       ),
@@ -94,25 +101,26 @@ class CustomIconButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Material(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-        color: Colors.blue,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        color: isActive ? primaryColor : Colors.white,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           child: Row(
             children: [
               Icon(
                 iconData,
-                color: Colors.white,
+                color: isActive ? Colors.white : primaryColor,
               ),
               isActive
                   ? Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: Text(
-                        text,
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              color: Colors.white,
-                            ),
-                      ),
+                      padding: const EdgeInsets.only(left: 15),
+                      child: Text(text,
+                          style: GoogleFonts.roboto(
+                            textStyle:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: Colors.white,
+                                    ),
+                          )),
                     )
                   : const SizedBox(),
             ],

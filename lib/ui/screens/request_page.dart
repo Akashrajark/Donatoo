@@ -8,22 +8,20 @@ class Request extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const ImageTextBox(
-            image: "assets/images/Emergency.jpg",
-            title: "Request",
+    return Column(
+      children: [
+        const ImageTextBox(
+          image: "assets/images/Emergency.jpg",
+          title: "Request",
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CustomButton(
+            text: "Create Request",
+            onTap: () {},
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CustomButton(
-              text: "Create Request",
-              onTap: () {},
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

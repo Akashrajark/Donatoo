@@ -8,16 +8,14 @@ class Organization extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: const [
-          ImageTextBox(
-            image: "assets/images/Emergency.jpg",
-            title: "Organization",
-          ),
-          OrganizationCard(),
-        ],
-      ),
+    return Column(
+      children: const [
+        ImageTextBox(
+          image: "assets/images/Emergency.jpg",
+          title: "Organization",
+        ),
+        OrganizationCard(),
+      ],
     );
   }
 }
