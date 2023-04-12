@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:donatoo/ui/screens/sing_in.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,8 +14,15 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Timer(const Duration(seconds: 3),
-        () => Navigator.pushReplacementNamed(context, '/SingIn'));
+    Timer(
+      const Duration(seconds: 3),
+      () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SignInScreen(),
+        ),
+      ),
+    );
     super.initState();
   }
 

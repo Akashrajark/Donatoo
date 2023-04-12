@@ -15,7 +15,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  late Color _color = primaryColor;
 
   @override
   void initState() {
@@ -120,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                           Navigator.pop(context);
                                         },
                                         text: "Cancel",
-                                        buttonType: ButtonType.cancel,
+                                        buttonType: ButtonType.secondary,
                                       ),
                                       CustomSmallButton(
                                         onTap: () {
@@ -250,6 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             ),
             Expanded(
               child: TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
                 controller: _tabController,
                 children: [
                   SizedBox(

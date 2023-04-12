@@ -105,7 +105,7 @@ class OrganizationDetails extends StatelessWidget {
                                           Navigator.pop(context);
                                         },
                                         text: "Cancel",
-                                        buttonType: ButtonType.cancel,
+                                        buttonType: ButtonType.secondary,
                                       ),
                                       CustomSmallButton(
                                         onTap: () {

@@ -1,11 +1,9 @@
-import 'package:donatoo/ui/screens/create_request.dart';
+import 'package:donatoo/ui/screens/signup_screen.dart';
 import 'package:donatoo/ui/screens/splashscreen.dart';
-
 import 'package:flutter/material.dart';
 
 import 'ui/screens/homescreen.dart';
 import 'ui/screens/sing_in.dart';
-import 'ui/screens/verify.dart';
 
 void main() {
   runApp(
@@ -36,8 +34,8 @@ void main() {
       debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => const HomeScreen(),
-        '/SingIn': (context) => const SingIn(),
-        '/Verify': (context) => const Verify(),
+        '/SignIn': (context) => const SignInScreen(),
+        '/SignUp': (context) => const SignUpScreen(),
         '/Home': (context) => const HomeScreen(),
       },
     ),

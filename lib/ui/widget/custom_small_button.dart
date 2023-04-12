@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../values/colors.dart';
 
-enum ButtonType { cancel, report }
+enum ButtonType { primary, secondary }
 
 class CustomSmallButton extends StatelessWidget {
   final ButtonType buttonType;
@@ -13,17 +13,17 @@ class CustomSmallButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onTap,
-    this.buttonType = ButtonType.report,
+    this.buttonType = ButtonType.primary,
   });
 
   @override
   Widget build(BuildContext context) {
     return Material(
       borderRadius: BorderRadius.circular(10),
-      color: buttonType == ButtonType.report ? primaryColor : Colors.white,
+      color: buttonType == ButtonType.primary ? primaryColor : Colors.white,
       child: InkWell(
         splashColor:
-            buttonType == ButtonType.report ? secondaryColor : primaryColor,
+            buttonType == ButtonType.primary ? secondaryColor : primaryColor,
         borderRadius: BorderRadius.circular(10),
         onTap: onTap,
         child: Padding(
@@ -31,7 +31,7 @@ class CustomSmallButton extends StatelessWidget {
           child: Text(
             text,
             style: GoogleFonts.roboto(
-              color: buttonType == ButtonType.report
+              color: buttonType == ButtonType.primary
                   ? secondaryColor
                   : primaryColor,
               textStyle: Theme.of(context).textTheme.titleMedium,

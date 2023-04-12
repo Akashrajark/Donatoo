@@ -1,96 +1,93 @@
+import 'package:donatoo/ui/screens/signup_screen.dart';
+import 'package:donatoo/ui/widget/custom_button.dart';
 import 'package:donatoo/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../widget/custom_button.dart';
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
 
-class SingIn extends StatelessWidget {
-  const SingIn({super.key});
+class _SignInScreenState extends State<SignInScreen> {
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: secondaryColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Image.asset(
-              "assets/images/splashimage.jpg",
-              fit: BoxFit.cover,
-            ),
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: secondaryColor,
+        title: Text(
+          'Sign In',
+          style: GoogleFonts.roboto(
+            textStyle: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 10,
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          autovalidateMode: AutovalidateMode.always,
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Expanded(child: SizedBox(height: 16)),
+              TextFormField(
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  hintText: 'Email',
+                  border: OutlineInputBorder(),
                 ),
-                Text(
-                  "Sign In",
-                  style: GoogleFonts.roboto(
-                    textStyle: Theme.of(context).textTheme.headline4,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter your email';
+                  } else if (!value.contains('@gmail.com')) {
+                    return 'Please enter a valid email address';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                obscureText: true,
+                decoration: const InputDecoration(
+                  hintText: 'Password',
+                  border: OutlineInputBorder(),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  "Enter your email and password",
-                  style: GoogleFonts.roboto(
-                    textStyle: Theme.of(context).textTheme.bodyLarge,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black38,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: "Email",
-                    hintStyle: GoogleFonts.roboto(
-                      textStyle:
-                          Theme.of(context).textTheme.titleMedium!.copyWith(
-                                color: secondaryColor,
-                                fontWeight: FontWeight.w500,
-                              ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: "Password",
-                    hintStyle: GoogleFonts.roboto(
-                      textStyle:
-                          Theme.of(context).textTheme.titleMedium!.copyWith(
-                                color: secondaryColor,
-                                fontWeight: FontWeight.w500,
-                              ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomButton(
-                  text: "Next",
-                  onTap: () {
-                    Navigator.pushNamed(context, '/Verify');
-                  },
-                ),
-              ],
-            ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter your password';
+                  } else if (value.length < 6) {
+                    return 'Password must be at least 6 characters';
+                  }
+                  return null;
+                },
+              ),
+              const Expanded(child: SizedBox(height: 16)),
+              CustomButton(
+                text: "Sign In",
+                onTap: () {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignUpScreen()));
+                    // TODO: perform sign-in with email and password
+                  }
+                },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
