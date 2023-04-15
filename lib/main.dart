@@ -1,5 +1,4 @@
 import 'package:donatoo/ui/screens/signup_screen.dart';
-import 'package:donatoo/ui/screens/splashscreen.dart';
 import 'package:flutter/material.dart';
 
 import 'ui/screens/homescreen.dart';

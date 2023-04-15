@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Text(
             "Donatoo",
             style: GoogleFonts.roboto(
-              textStyle: Theme.of(context).textTheme.headline3,
+              textStyle: Theme.of(context).textTheme.headlineLarge,
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
