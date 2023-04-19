@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'custom_label.dart';
 
 class OrganizationCard extends StatelessWidget {
+  final Map<String, dynamic> organizationDetails;
   const OrganizationCard({
     super.key,
+    required this.organizationDetails,
   });
 
   @override
@@ -28,7 +30,7 @@ class OrganizationCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.asset(
-                "assets/images/Emergency.jpg",
+                organizationDetails['image'],
                 fit: BoxFit.cover,
               ),
               Padding(
@@ -36,18 +38,18 @@ class OrganizationCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Organization Name",
+                    Text(organizationDetails['description'],
                         style: Theme.of(context).textTheme.headlineSmall),
                     const SizedBox(
                       height: 5,
                     ),
-                    Text("category",
+                    Text(organizationDetails['category'],
                         style: Theme.of(context).textTheme.bodyMedium),
                     const SizedBox(
                       height: 10,
                     ),
                     Text(
-                      "\$60000",
+                      organizationDetails['collectedAmount'],
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             color: Colors.lightGreen,
                             fontWeight: FontWeight.bold,
@@ -56,8 +58,8 @@ class OrganizationCard extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    const CustomLabel(
-                      titleText: "24",
+                    CustomLabel(
+                      titleText: organizationDetails['donaters'],
                       descriptionText: "donaters",
                     ),
                     const SizedBox(

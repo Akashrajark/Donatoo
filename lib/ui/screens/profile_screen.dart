@@ -1,4 +1,6 @@
+import 'package:donatoo/ui/widget/custom_dialog.dart';
 import 'package:donatoo/values/colors.dart';
+import 'package:donatoo/values/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -51,91 +53,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                 child: GestureDetector(
                   onTap: () {
                     showDialog(
-                      context: context,
-                      builder: (context) => Dialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: SizedBox(
-                          height: 200,
-                          child: Material(
-                            color: secondaryColor,
-                            borderRadius: BorderRadius.circular(10),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Report",
-                                    style: GoogleFonts.roboto(
-                                      textStyle: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium!
-                                          .copyWith(
-                                            fontWeight: FontWeight.w500,
-                                            color: primaryColor,
-                                          ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  const TextField(
-                                    maxLines: 4,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      hintText: "Details",
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 10,
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.black26,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      CustomSmallButton(
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                        },
-                                        text: "Cancel",
-                                        buttonType: ButtonType.secondary,
-                                      ),
-                                      CustomSmallButton(
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                        },
-                                        text: "Report",
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
+                        context: context,
+                        builder: (context) => const CustomDialog(
+                              label: 'FeedBack',
+                            ));
                   },
                   child: Text(
                     "FeedBack",
@@ -353,7 +274,7 @@ class ProfileCustomButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Material(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(borderRadius),
         color: isActive ? primaryColor : Colors.white,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

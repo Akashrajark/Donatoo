@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:donatoo/ui/screens/sing_in.dart';
+import 'package:donatoo/ui/screens/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

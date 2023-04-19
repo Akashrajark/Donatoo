@@ -1,30 +1,41 @@
 import 'package:donatoo/ui/screens/signup_screen.dart';
+import 'package:donatoo/values/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'ui/screens/homescreen.dart';
-import 'ui/screens/sing_in.dart';
+import 'ui/screens/sign_in.dart';
 
 void main() {
   runApp(
     MaterialApp(
       theme: ThemeData(
-        inputDecorationTheme: const InputDecorationTheme(
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+        primarySwatch: Colors.deepPurple,
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(borderRadius)),
+          hintStyle: GoogleFonts.roboto(
+            textStyle: ThemeData.light().textTheme.titleMedium!.copyWith(
+                  color: Colors.black38,
+                  fontWeight: FontWeight.w500,
+                ),
           ),
-          focusedBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+          ),
+          focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(
               color: Colors.black26,
               width: 1,
             ),
             borderRadius: BorderRadius.all(
-              Radius.circular(10),
+              Radius.circular(borderRadius),
             ),
           ),
           filled: true,
           fillColor: Colors.white,
-          contentPadding: EdgeInsets.symmetric(
+          contentPadding: const EdgeInsets.symmetric(
             horizontal: 10,
             vertical: 10,
           ),
@@ -32,7 +43,7 @@ void main() {
       ),
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (context) => const HomeScreen(),
+        '/': (context) => const SignInScreen(),
         '/SignIn': (context) => const SignInScreen(),
         '/SignUp': (context) => const SignUpScreen(),
         '/Home': (context) => const HomeScreen(),

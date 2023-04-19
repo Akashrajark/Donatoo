@@ -1,7 +1,9 @@
 import 'package:donatoo/ui/screens/profile_screen.dart';
 import 'package:donatoo/values/colors.dart';
+import 'package:donatoo/values/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'create_request.dart';
 import 'emergency_page.dart';
 import 'organization_page.dart';
 import 'request_page.dart';
@@ -83,6 +85,22 @@ class _HomeScreenState extends State<HomeScreen>
           ],
         ),
       ),
+      floatingActionButton: _tabController.index == 2
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CreateRequest(),
+                  ),
+                );
+              },
+              label: const Text("Add Request"),
+              shape: const RoundedRectangleBorder(),
+              backgroundColor: primaryColor,
+              icon: const Icon(Icons.add),
+            )
+          : const SizedBox(),
     );
   }
 }
@@ -105,7 +123,8 @@ class CustomIconButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Material(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius)),
         color: isActive ? primaryColor : Colors.white,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),

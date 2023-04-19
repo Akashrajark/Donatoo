@@ -1,11 +1,14 @@
 import 'package:donatoo/ui/screens/request_detail_screen.dart';
+import 'package:donatoo/values/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'custom_label.dart';
 
 class EmergencyCard extends StatelessWidget {
+  final Map<String, dynamic> emergencyRequestDetail;
   const EmergencyCard({
     super.key,
+    required this.emergencyRequestDetail,
   });
 
   @override
@@ -20,13 +23,14 @@ class EmergencyCard extends StatelessWidget {
         );
       },
       child: Material(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius)),
         elevation: 2,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset(
-              "assets/images/Emergency.jpg",
+              emergencyRequestDetail['image'],
               fit: BoxFit.cover,
             ),
             Padding(
@@ -34,10 +38,12 @@ class EmergencyCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Title",
+                  Text(emergencyRequestDetail['title'],
                       style: Theme.of(context).textTheme.headlineSmall),
-                  Text(
-                      "asdabsdh jhfgjksd sdfjhskdn sdjfhsjkdhf sdjfskdfhs sjdkfskdj sdjkdfjsddklsd kjhsdjkfjh fksdj ahdsbkajbs",
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  Text(emergencyRequestDetail['description'],
                       style: Theme.of(context).textTheme.bodyMedium),
                   const SizedBox(
                     height: 10,
@@ -46,7 +52,7 @@ class EmergencyCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "\$60000",
+                        emergencyRequestDetail['collectedAmount'],
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
                                   color: Colors.lightGreen,
@@ -54,7 +60,7 @@ class EmergencyCard extends StatelessWidget {
                                 ),
                       ),
                       Text(
-                        "\$100000",
+                        emergencyRequestDetail['requiredAmount'],
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
                                   color: Colors.grey,
@@ -76,23 +82,23 @@ class EmergencyCard extends StatelessWidget {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
+                    children: [
                       Expanded(
                         child: CustomLabel(
-                          titleText: "60%",
+                          titleText: emergencyRequestDetail['fundedPercentage'],
                           descriptionText: "funded",
                           color: Colors.lightGreen,
                         ),
                       ),
                       Expanded(
                           child: CustomLabel(
-                        titleText: "24",
+                        titleText: emergencyRequestDetail['donaters'],
                         descriptionText: "donaters",
                       )),
                       Expanded(
                         flex: 2,
                         child: CustomLabel(
-                          titleText: "11",
+                          titleText: emergencyRequestDetail['timeleft'],
                           descriptionText: "hours to go",
                         ),
                       ),

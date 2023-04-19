@@ -10,24 +10,10 @@ class Request extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        const ImageTextBox(
+      children: const [
+        ImageTextBox(
           image: "assets/images/Emergency.jpg",
           title: "Request",
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: CustomButton(
-            text: "Create Request",
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CreateRequest(),
-                ),
-              );
-            },
-          ),
         ),
       ],
     );

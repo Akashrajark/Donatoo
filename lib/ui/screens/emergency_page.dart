@@ -15,7 +15,18 @@ class Emergency extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.all(8.0),
-          child: EmergencyCard(),
+          child: EmergencyCard(
+            emergencyRequestDetail: {
+              'image': 'assets/images/Emergency.jpg',
+              'title': 'abc',
+              'description': 'sjhjbjbknbjk',
+              'collectedAmount': '60000',
+              'requiredAmount': '100000',
+              'fundedPercentage': '60%',
+              'donaters': '24',
+              'timeleft': '11'
+            },
+          ),
         ),
       ],
     );

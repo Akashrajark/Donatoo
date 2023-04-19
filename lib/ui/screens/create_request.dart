@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../../util/validaters.dart';
 import '../../values/colors.dart';
@@ -13,29 +14,43 @@ class CreateRequest extends StatefulWidget {
 }
 
 class _CreateRequestState extends State<CreateRequest> {
-  TextEditingController patientFullNameController = TextEditingController();
-  TextEditingController patientAddressLineController = TextEditingController();
-  TextEditingController patientPlaceController = TextEditingController();
-  TextEditingController patientDistrictController = TextEditingController();
-  TextEditingController patientPincodeController = TextEditingController();
-  TextEditingController patientStateController = TextEditingController();
-  TextEditingController patientContactController = TextEditingController();
-  TextEditingController userFullNameController = TextEditingController();
-  TextEditingController userAddressLineController = TextEditingController();
-  TextEditingController userPlaceController = TextEditingController();
-  TextEditingController userDistrictController = TextEditingController();
-  TextEditingController userPincodeController = TextEditingController();
-  TextEditingController userStateController = TextEditingController();
-  TextEditingController caseNameController = TextEditingController();
-  TextEditingController hospitalNameController = TextEditingController();
-  TextEditingController dueDateController = TextEditingController();
-  TextEditingController amountController = TextEditingController();
-  TextEditingController gpayController = TextEditingController();
-  TextEditingController bankAccountController = TextEditingController();
-  TextEditingController aboutCaseController = TextEditingController();
-
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _duedateController = TextEditingController();
+  final TextEditingController _amountRequiredController =
+      TextEditingController();
+  final TextEditingController _amountCollectedController =
+      TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _patientNameController = TextEditingController();
+  final TextEditingController _patientPhoneController = TextEditingController();
+  final TextEditingController _patientAddressLineController =
+      TextEditingController();
+  final TextEditingController _patientPlaceController = TextEditingController();
+  final TextEditingController _patientDistrictController =
+      TextEditingController();
+  final TextEditingController _patientStateController = TextEditingController();
+  final TextEditingController _patientPincodeController =
+      TextEditingController();
+  final TextEditingController _hospitalNameController = TextEditingController();
+  final TextEditingController _hospitalPhoneController =
+      TextEditingController();
+  final TextEditingController _hospitalAddressLineController =
+      TextEditingController();
+  final TextEditingController _hospitalPlaceController =
+      TextEditingController();
+  final TextEditingController _hospitalDistrictController =
+      TextEditingController();
+  final TextEditingController _hospitalStateController =
+      TextEditingController();
+  final TextEditingController _hospitalPincodeController =
+      TextEditingController();
+  final TextEditingController _bankAccountHolderController =
+      TextEditingController();
+  final TextEditingController _bankAccountNumberController =
+      TextEditingController();
+  final TextEditingController _branchNameController = TextEditingController();
+  final TextEditingController _ifscCodeController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,11 +92,119 @@ class _CreateRequestState extends State<CreateRequest> {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Form(
-                autovalidateMode: AutovalidateMode.always,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Base Details",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.roboto(
+                        textStyle:
+                            Theme.of(context).textTheme.titleLarge!.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      " Enter the details about this campaign",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.roboto(
+                        textStyle:
+                            Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _titleController,
+                      validator: titleValidator,
+                      decoration: const InputDecoration(
+                        hintText: "Title",
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      readOnly: true,
+                      controller: _duedateController,
+                      decoration: const InputDecoration(
+                        hintText: 'Duedate',
+                      ),
+                      onTap: () async {
+                        await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2015),
+                          lastDate: DateTime(2025),
+                        ).then((selectedDate) {
+                          if (selectedDate != null) {
+                            _duedateController.text =
+                                DateFormat('yyyy-MM-dd').format(selectedDate);
+                          }
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter date.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _amountRequiredController,
+                      validator: amount,
+                      decoration: const InputDecoration(
+                        hintText: "Amount Required",
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _amountCollectedController,
+                      validator: amount,
+                      decoration: const InputDecoration(
+                        hintText: "Amount Collected",
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _descriptionController,
+                      validator: description,
+                      maxLines: 4,
+                      decoration: const InputDecoration(
+                        hintText: "Description",
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Divider(
+                      height: 10,
+                      thickness: 2,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Text(
                       "Patient Details",
                       textAlign: TextAlign.center,
@@ -94,132 +217,16 @@ class _CreateRequestState extends State<CreateRequest> {
                       ),
                     ),
                     const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: patientFullNameController,
-                      validator: fullName,
-                      decoration: InputDecoration(
-                        hintText: "Full Name",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
-                      ),
-                    ),
-                    TextFormField(
-                      controller: patientContactController,
-                      validator: fullName,
-                      decoration: InputDecoration(
-                        hintText: "Contact Number",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: patientAddressLineController,
-                      validator: addressLine,
-                      decoration: InputDecoration(
-                        hintText: "Address line",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: patientPlaceController,
-                      validator: place,
-                      decoration: InputDecoration(
-                        hintText: "Place",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: patientDistrictController,
-                      validator: district,
-                      decoration: InputDecoration(
-                        hintText: "District",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: patientPincodeController,
-                      validator: pincode,
-                      decoration: InputDecoration(
-                        hintText: "Pincode",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: patientStateController,
-                      validator: state,
-                      decoration: InputDecoration(
-                        hintText: "State",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
+                      height: 5,
                     ),
                     Text(
-                      "User Details",
+                      " Enter the details about the patient",
                       textAlign: TextAlign.center,
                       style: GoogleFonts.roboto(
                         textStyle:
-                            Theme.of(context).textTheme.titleLarge!.copyWith(
+                            Theme.of(context).textTheme.bodyMedium!.copyWith(
                                   color: Colors.black,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w400,
                                 ),
                       ),
                     ),
@@ -227,103 +234,78 @@ class _CreateRequestState extends State<CreateRequest> {
                       height: 10,
                     ),
                     TextFormField(
-                      controller: userFullNameController,
+                      controller: _patientNameController,
                       validator: fullName,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Full Name",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                      controller: userAddressLineController,
+                      controller: _patientPhoneController,
+                      validator: phoneNumber,
+                      decoration: const InputDecoration(
+                        hintText: "Contact Number",
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _patientAddressLineController,
                       validator: addressLine,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Address line",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                      controller: userPlaceController,
+                      controller: _patientPlaceController,
                       validator: place,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Place",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                      controller: userDistrictController,
+                      controller: _patientDistrictController,
                       validator: district,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "District",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                      controller: userPincodeController,
-                      validator: pincode,
-                      decoration: InputDecoration(
-                        hintText: "Pincode",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: userStateController,
+                      controller: _patientStateController,
                       validator: state,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "State",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _patientPincodeController,
+                      validator: pincode,
+                      decoration: const InputDecoration(
+                        hintText: "Pincode",
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Divider(
+                      height: 10,
+                      thickness: 2,
                     ),
                     const SizedBox(
                       height: 10,
@@ -340,175 +322,162 @@ class _CreateRequestState extends State<CreateRequest> {
                       ),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 5,
                     ),
-                    TextFormField(
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter case name';
-                        }
-                        final nameExp = RegExp(r'^[A-Za-z ]+$');
-                        if (!nameExp.hasMatch(value)) {
-                          return 'Please enter a valid case name';
-                        }
-                      },
-                      controller: caseNameController,
-                      decoration: InputDecoration(
-                        hintText: "Case Name (Title)",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
+                    Text(
+                      " Enter hospital details where the patient is admitted",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.roboto(
+                        textStyle:
+                            Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                ),
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter hospital name';
-                        }
-                        final nameExp = RegExp(r'^[A-Za-z ]+$');
-                        if (!nameExp.hasMatch(value)) {
-                          return 'Please enter a valid hospital name';
-                        }
-                      },
-                      controller: hospitalNameController,
-                      decoration: InputDecoration(
-                        hintText: "Hospital Name",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
+                      controller: _hospitalNameController,
+                      validator: fullName,
+                      decoration: const InputDecoration(
+                        hintText: "Full Name",
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter date';
-                        }
-                        if (!regex.hasMatch(value)) {
-                          return 'Please enter a valid date';
-                        }
-                      },
-                      controller: dueDateController,
-                      decoration: InputDecoration(
-                        hintText: "DueDate",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
+                      controller: _hospitalPhoneController,
+                      validator: phoneNumber,
+                      decoration: const InputDecoration(
+                        hintText: "Contact Number",
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter bank account';
-                        }
-                        if (!regex.hasMatch(value)) {
-                          return 'Please enter a valid  bank account';
-                        }
-                      },
-                      controller: amountController,
-                      decoration: InputDecoration(
-                        hintText: "Amount",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
+                      controller: _hospitalAddressLineController,
+                      validator: addressLine,
+                      decoration: const InputDecoration(
+                        hintText: "Address line",
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter gpay ';
-                        }
-                        if (!regex.hasMatch(value)) {
-                          return 'Please enter a valid gpay';
-                        }
-                      },
-                      controller: gpayController,
-                      decoration: InputDecoration(
-                        hintText: "Gpay",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
+                      controller: _hospitalPlaceController,
+                      validator: place,
+                      decoration: const InputDecoration(
+                        hintText: "Place",
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter bank account';
-                        }
-                        if (!regex.hasMatch(value)) {
-                          return 'Please enter a valid  bank account';
-                        }
-                      },
-                      controller: bankAccountController,
-                      decoration: InputDecoration(
-                        hintText: "Bank Account",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
+                      controller: _hospitalDistrictController,
+                      validator: district,
+                      decoration: const InputDecoration(
+                        hintText: "District",
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     TextFormField(
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter about case';
-                        }
-                        final nameExp = RegExp(r'^[A-Za-z ]+$');
-                        if (!nameExp.hasMatch(value)) {
-                          return 'Please enter a valid case';
-                        }
-                      },
-                      controller: aboutCaseController,
-                      maxLines: 4,
-                      decoration: InputDecoration(
-                        hintText: "About Case",
-                        hintStyle: GoogleFonts.roboto(
-                          textStyle:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: secondaryColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
+                      controller: _hospitalStateController,
+                      validator: state,
+                      decoration: const InputDecoration(
+                        hintText: "State",
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _hospitalPincodeController,
+                      validator: pincode,
+                      decoration: const InputDecoration(
+                        hintText: "Pincode",
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Divider(
+                      height: 10,
+                      thickness: 2,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Bank Details",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.roboto(
+                        textStyle:
+                            Theme.of(context).textTheme.titleLarge!.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      " Enter bank details of the authorised person",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.roboto(
+                        textStyle:
+                            Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _bankAccountHolderController,
+                      validator: accountHolder,
+                      decoration: const InputDecoration(
+                        hintText: "Bank Account Holder",
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _bankAccountNumberController,
+                      validator: accountNumber,
+                      decoration: const InputDecoration(
+                        hintText: "Bank Account Number",
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _branchNameController,
+                      validator: branchName,
+                      decoration: const InputDecoration(
+                        hintText: "Branch Name",
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _ifscCodeController,
+                      validator: ifscCode,
+                      decoration: const InputDecoration(
+                        hintText: "IFSC Code",
                       ),
                     ),
                   ],
@@ -518,15 +487,26 @@ class _CreateRequestState extends State<CreateRequest> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: CustomButton(
-          text: "Create Request",
-          onTap: () {
-            if (formKey.currentState!.validate()) {
-              Navigator.pop(context);
-            }
-          },
+      bottomNavigationBar: Material(
+        elevation: 5,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Divider(
+              height: 1,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: CustomButton(
+                text: "Create Request",
+                onTap: () {
+                  if (formKey.currentState!.validate()) {
+                    Navigator.pop(context);
+                  }
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

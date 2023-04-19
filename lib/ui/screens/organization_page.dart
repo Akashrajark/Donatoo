@@ -14,7 +14,15 @@ class Organization extends StatelessWidget {
           image: "assets/images/Emergency.jpg",
           title: "Organization",
         ),
-        OrganizationCard(),
+        OrganizationCard(
+          organizationDetails: {
+            'image': 'assets/images/Emergency.jpg',
+            'description': 'aksjhdkasjnd',
+            'category': 'sjdnfjnk',
+            'collectedAmount': '\$60000',
+            'donaters': '24',
+          },
+        ),
       ],
     );
   }
