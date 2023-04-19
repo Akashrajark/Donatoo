@@ -82,6 +82,7 @@ class _CreateRequestState extends State<CreateRequest> {
                   alignment: Alignment.center,
                   child: Text(
                     "Add image",
+                    //TODO:image picker
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           color: primaryColor,
                         ),
@@ -480,6 +481,7 @@ class _CreateRequestState extends State<CreateRequest> {
                         hintText: "IFSC Code",
                       ),
                     ),
+                    //TODO:add proof option
                   ],
                 ),
               ),
