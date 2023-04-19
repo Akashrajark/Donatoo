@@ -2,11 +2,18 @@ import 'package:donatoo/ui/screens/signup_screen.dart';
 import 'package:donatoo/values/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'ui/screens/homescreen.dart';
 import 'ui/screens/sign_in.dart';
 
-void main() {
+void main() async {
+  await Supabase.initialize(
+    url: 'https://autcpaoiguonohmlwvub.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1dGNwYW9pZ3Vvbm9obWx3dnViIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODEyOTQ1NDQsImV4cCI6MTk5Njg3MDU0NH0.LmErf0I1HObrmPNuYTqrY7lK4hSL1gYrNE4u46Iqdr8',
+  );
+
   runApp(
     MaterialApp(
       theme: ThemeData(
