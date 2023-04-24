@@ -1,8 +1,10 @@
 import 'package:donatoo/ui/screens/profile_screen.dart';
+import 'package:donatoo/ui/screens/sign_in.dart';
 import 'package:donatoo/values/colors.dart';
 import 'package:donatoo/values/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'create_request.dart';
 import 'emergency_page.dart';
 import 'organization_page.dart';
@@ -26,6 +28,20 @@ class _HomeScreenState extends State<HomeScreen>
       setState(() {});
     });
     super.initState();
+    Future.delayed(
+      const Duration(milliseconds: 100),
+      () {
+        if (Supabase.instance.client.auth.currentUser == null) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SignInScreen(),
+            ),
+            (Route<dynamic> route) => true,
+          );
+        }
+      },
+    );
   }
 
   @override
