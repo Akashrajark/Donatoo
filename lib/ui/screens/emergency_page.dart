@@ -10,8 +10,10 @@ class Emergency extends StatelessWidget {
     return Column(
       children: const [
         ImageTextBox(
-          image: "assets/images/Emergency.jpg",
-          title: "Emergency",
+          image:
+              "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2370&q=80",
+          title: "Emergencies",
+          iconData: Icons.emergency,
         ),
         Padding(
           padding: EdgeInsets.all(8.0),

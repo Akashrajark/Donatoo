@@ -3,17 +3,19 @@ import 'package:flutter/material.dart';
 class CustomLabel extends StatelessWidget {
   final String titleText, descriptionText;
   final Color color;
+  final CrossAxisAlignment alignment;
   const CustomLabel({
     super.key,
     this.color = Colors.grey,
     required this.titleText,
     required this.descriptionText,
+    this.alignment = CrossAxisAlignment.start,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: alignment,
       children: [
         Text(
           titleText,

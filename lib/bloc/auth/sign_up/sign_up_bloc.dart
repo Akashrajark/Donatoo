@@ -25,7 +25,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         );
 
         if (user.user != null) {
-          await Supabase.instance.client.from('profiles').insert(
+          await Supabase.instance.client.from('profile').insert(
             {
               'name': event.name,
               'phone': event.phone,
