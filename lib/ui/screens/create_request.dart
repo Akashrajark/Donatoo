@@ -1,4 +1,12 @@
+import 'dart:io';
+
+import 'package:donatoo/bloc/manage_requests/manage_requests_bloc.dart';
+import 'package:donatoo/ui/screens/homescreen.dart';
+import 'package:donatoo/ui/screens/request_page.dart';
+import 'package:donatoo/util/custom_file_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -7,7 +15,10 @@ import '../../values/colors.dart';
 import '../widget/custom_button.dart';
 
 class CreateRequest extends StatefulWidget {
-  const CreateRequest({super.key});
+  final ManageRequestBloc manageRequestBloc;
+  final Map<String, dynamic>? details;
+  const CreateRequest(
+      {super.key, required this.manageRequestBloc, this.details});
 
   @override
   State<CreateRequest> createState() => _CreateRequestState();
@@ -51,6 +62,46 @@ class _CreateRequestState extends State<CreateRequest> {
       TextEditingController();
   final TextEditingController _branchNameController = TextEditingController();
   final TextEditingController _ifscCodeController = TextEditingController();
+
+  PlatformFile? file;
+  DateTime? selectedDateTime;
+
+  @override
+  void initState() {
+    if (widget.details != null) {
+      selectedDateTime = DateTime.parse(widget.details!['duedate']);
+      _titleController.text = widget.details!['title'];
+      _duedateController.text = DateFormat('yyyy-MM-dd')
+          .format(DateTime.parse(widget.details!['duedate']));
+      _amountRequiredController.text =
+          widget.details!['amount_required'].toString();
+      _amountCollectedController.text =
+          widget.details!['amount_collected'].toString();
+      _descriptionController.text = widget.details!['description'];
+      _bankAccountNumberController.text = widget.details!['bank_account_no'];
+      _ifscCodeController.text = widget.details!['ifsc_code'];
+      _bankAccountHolderController.text = widget.details!['account_holder'];
+      _patientNameController.text = widget.details!['patient_name'];
+      _patientPlaceController.text = widget.details!['patient_place'];
+      _patientDistrictController.text = widget.details!['patient_district'];
+      _patientAddressLineController.text =
+          widget.details!['patient_address_line'];
+      _patientStateController.text = widget.details!['patient_state'];
+      _patientPincodeController.text = widget.details!['patient_pincode'];
+      _hospitalNameController.text = widget.details!['hospital_name'];
+      _hospitalAddressLineController.text =
+          widget.details!['hospital_address_line'];
+      _hospitalPlaceController.text = widget.details!['hospital_place'];
+      _hospitalDistrictController.text = widget.details!['hospital_district'];
+      _hospitalStateController.text = widget.details!['hospital_state'];
+      _hospitalPincodeController.text = widget.details!['hospital_pincode'];
+      _patientPhoneController.text = widget.details!['patient_phone'];
+      _hospitalPhoneController.text = widget.details!['hospital_phone'] ?? '';
+      _branchNameController.text = widget.details!['branch_name'] ?? '';
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,14 +129,29 @@ class _CreateRequestState extends State<CreateRequest> {
               height: 220,
               width: MediaQuery.of(context).size.width,
               child: Material(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Add image",
-                    //TODO:image picker
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          color: primaryColor,
-                        ),
+                child: InkWell(
+                  onTap: () async {
+                    PlatformFile? selectedFile = await pickFile();
+                    if (selectedFile != null) {
+                      file = selectedFile;
+                      setState(() {});
+                    }
+                  },
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: file != null
+                        ? Image.file(File(file!.path!))
+                        : widget.details != null
+                            ? Image.network(widget.details!['image'])
+                            : Text(
+                                "Add image",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(
+                                      color: primaryColor,
+                                    ),
+                              ),
                   ),
                 ),
               ),
@@ -153,6 +219,7 @@ class _CreateRequestState extends State<CreateRequest> {
                           lastDate: DateTime(2025),
                         ).then((selectedDate) {
                           if (selectedDate != null) {
+                            selectedDateTime = selectedDate;
                             _duedateController.text =
                                 DateFormat('yyyy-MM-dd').format(selectedDate);
                           }
@@ -481,7 +548,7 @@ class _CreateRequestState extends State<CreateRequest> {
                         hintText: "IFSC Code",
                       ),
                     ),
-                    //TODO:add proof option
+                    // //TODO:add proof option
                   ],
                 ),
               ),
@@ -500,10 +567,101 @@ class _CreateRequestState extends State<CreateRequest> {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: CustomButton(
-                text: "Create Request",
+                text: widget.details != null
+                    ? 'Update Request'
+                    : "Create Request",
                 onTap: () {
                   if (formKey.currentState!.validate()) {
-                    Navigator.pop(context);
+                    if (widget.details != null) {
+                      widget.manageRequestBloc.add(
+                        EditRequestEvent(
+                          title: _titleController.text.trim(),
+                          description: _descriptionController.text.trim(),
+                          amountRequired:
+                              int.parse(_amountRequiredController.text.trim()),
+                          amountCollected:
+                              int.parse(_amountCollectedController.text.trim()),
+                          duedate: selectedDateTime!,
+                          image: file,
+                          accountHolder:
+                              _bankAccountHolderController.text.trim(),
+                          bankAcNumber:
+                              _bankAccountNumberController.text.trim(),
+                          hospitalAddressLine:
+                              _hospitalAddressLineController.text.trim(),
+                          hospitalDistrict:
+                              _hospitalDistrictController.text.trim(),
+                          hospitalName: _hospitalNameController.text.trim(),
+                          hospitalPinCode:
+                              _hospitalPincodeController.text.trim(),
+                          hospitalPlace: _hospitalPlaceController.text.trim(),
+                          hospitalState: _hospitalStateController.text.trim(),
+                          ifscCode: _ifscCodeController.text.trim(),
+                          patientAddressLine:
+                              _patientAddressLineController.text.trim(),
+                          patientDistrict:
+                              _patientDistrictController.text.trim(),
+                          patientName: _patientNameController.text.trim(),
+                          patientPhone:
+                              int.parse(_patientPhoneController.text.trim()),
+                          patientPinCode: _patientPincodeController.text.trim(),
+                          patientPlace: _patientPlaceController.text.trim(),
+                          patientState: _patientStateController.text.trim(),
+                          branchName: _branchNameController.text.trim(),
+                          hospitalPhone: _hospitalPhoneController.text.trim(),
+                          requestId: widget.details!['id'],
+                        ),
+                      );
+
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const HomeScreen(
+                                    currentIndex: 2,
+                                  )),
+                          (route) => true);
+                    } else {
+                      widget.manageRequestBloc.add(
+                        AddRequestEvent(
+                          title: _titleController.text.trim(),
+                          description: _descriptionController.text.trim(),
+                          amountRequired:
+                              int.parse(_amountRequiredController.text.trim()),
+                          amountCollected:
+                              int.parse(_amountCollectedController.text.trim()),
+                          duedate: selectedDateTime!,
+                          image: file!,
+                          accountHolder:
+                              _bankAccountHolderController.text.trim(),
+                          bankAcNumber:
+                              _bankAccountNumberController.text.trim(),
+                          hospitalAddressLine:
+                              _hospitalAddressLineController.text.trim(),
+                          hospitalDistrict:
+                              _hospitalDistrictController.text.trim(),
+                          hospitalName: _hospitalNameController.text.trim(),
+                          hospitalPinCode:
+                              _hospitalPincodeController.text.trim(),
+                          hospitalPlace: _hospitalPlaceController.text.trim(),
+                          hospitalState: _hospitalStateController.text.trim(),
+                          ifscCode: _ifscCodeController.text.trim(),
+                          patientAddressLine:
+                              _patientAddressLineController.text.trim(),
+                          patientDistrict:
+                              _patientDistrictController.text.trim(),
+                          patientName: _patientNameController.text.trim(),
+                          patientPhone:
+                              int.parse(_patientPhoneController.text.trim()),
+                          patientPinCode: _patientPincodeController.text.trim(),
+                          patientPlace: _patientPlaceController.text.trim(),
+                          patientState: _patientStateController.text.trim(),
+                          branchName: _branchNameController.text.trim(),
+                          hospitalPhone: _hospitalPhoneController.text.trim(),
+                        ),
+                      );
+
+                      Navigator.pop(context);
+                    }
                   }
                 },
               ),

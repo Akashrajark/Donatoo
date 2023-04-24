@@ -1,3 +1,4 @@
+import 'package:donatoo/bloc/manage_requests/manage_requests_bloc.dart';
 import 'package:flutter/material.dart';
 import '../widget/custom_emergency_card.dart';
 import '../widget/image_tex_box.dart';
@@ -15,21 +16,21 @@ class Emergency extends StatelessWidget {
           title: "Emergencies",
           iconData: Icons.emergency,
         ),
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: EmergencyCard(
-            emergencyRequestDetail: {
-              'image': 'assets/images/Emergency.jpg',
-              'title': 'abc',
-              'description': 'sjhjbjbknbjk',
-              'collectedAmount': '60000',
-              'requiredAmount': '100000',
-              'fundedPercentage': '60%',
-              'donaters': '24',
-              'timeleft': '11'
-            },
-          ),
-        ),
+        Padding(padding: EdgeInsets.all(8.0), child: SizedBox()
+            //  EmergencyCard(
+            //   //manageRequestBloc: ManageRequestBloc(),
+            //   emergencyRequestDetail: {
+            //     'image': 'assets/images/Emergency.jpg',
+            //     'title': 'abc',
+            //     'description': 'sjhjbjbknbjk',
+            //     'collectedAmount': '60000',
+            //     'requiredAmount': '100000',
+            //     'fundedPercentage': '60%',
+            //     'donaters': '24',
+            //     'timeleft': '11'
+            //   },
+            // ),
+            ),
       ],
     );
   }

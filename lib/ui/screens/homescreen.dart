@@ -1,3 +1,4 @@
+import 'package:donatoo/bloc/manage_requests/manage_requests_bloc.dart';
 import 'package:donatoo/ui/screens/profile_screen.dart';
 import 'package:donatoo/ui/screens/sign_in.dart';
 import 'package:donatoo/values/colors.dart';
@@ -11,7 +12,8 @@ import 'organization_page.dart';
 import 'request_page.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final int? currentIndex;
+  const HomeScreen({super.key, this.currentIndex});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -21,9 +23,12 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  ManageRequestBloc manageRequestBloc = ManageRequestBloc();
+
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(
+        length: 3, vsync: this, initialIndex: widget.currentIndex ?? 0);
     _tabController.addListener(() {
       setState(() {});
     });
@@ -52,10 +57,12 @@ class _HomeScreenState extends State<HomeScreen>
         child: TabBarView(
           physics: const NeverScrollableScrollPhysics(),
           controller: _tabController,
-          children: const [
-            Emergency(),
-            Organization(),
-            Request(),
+          children: [
+            const Emergency(),
+            const Organization(),
+            Request(
+              manageRequestBloc: manageRequestBloc,
+            ),
           ],
         ),
       ),
@@ -107,7 +114,9 @@ class _HomeScreenState extends State<HomeScreen>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CreateRequest(),
+                    builder: (context) => CreateRequest(
+                      manageRequestBloc: manageRequestBloc,
+                    ),
                   ),
                 );
               },
