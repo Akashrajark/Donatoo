@@ -1,4 +1,5 @@
 import 'package:donatoo/bloc/profile/profile_bloc.dart';
+import 'package:donatoo/ui/screens/sign_in.dart';
 import 'package:donatoo/ui/widget/custom_alert_dialog.dart';
 import 'package:donatoo/ui/widget/custom_dialog.dart';
 import 'package:donatoo/values/colors.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../widget/custom_button.dart';
 
@@ -145,7 +147,14 @@ class _ProfileScreenState extends State<ProfileScreen>
                                 title: 'Logout?',
                                 message: 'Are you sure you want to logout?',
                                 primaryButtonLabel: 'Logout',
-                                primaryOnPressed: () {},
+                                primaryOnPressed: () async {
+                                  await Supabase.instance.client.auth.signOut();
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const SignInScreen()),
+                                      (route) => true);
+                                },
                                 secondaryButtonLabel: 'Cancel',
                               ),
                             );
