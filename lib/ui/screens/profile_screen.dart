@@ -1,8 +1,11 @@
+import 'package:donatoo/bloc/profile/profile_bloc.dart';
 import 'package:donatoo/ui/widget/custom_alert_dialog.dart';
 import 'package:donatoo/ui/widget/custom_dialog.dart';
 import 'package:donatoo/values/colors.dart';
 import 'package:donatoo/values/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../widget/custom_button.dart';
@@ -17,6 +20,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final ProfileBloc profileBloc = ProfileBloc();
 
   @override
   void initState() {
@@ -25,210 +29,188 @@ class _ProfileScreenState extends State<ProfileScreen>
       setState(() {});
     });
     super.initState();
+    profileBloc.add(ProfileEvent());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: secondaryColor,
-      appBar: AppBar(
-        backgroundColor: secondaryColor,
-        elevation: 0,
-        centerTitle: true,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: primaryColor,
-          ),
-        ),
-        actions: [
-          Row(
-            children: [
-              TextButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => const CustomDialog(
-                      label: 'FeedBack',
-                    ),
-                  );
+    return BlocProvider<ProfileBloc>.value(
+      value: profileBloc,
+      child: BlocConsumer<ProfileBloc, ProfileState>(
+        listener: (context, state) {
+          if (state is ProfileFailureState) {
+            showDialog(
+              context: context,
+              builder: (context) => CustomAlertDialog(
+                title: 'Failure',
+                message: state.message,
+                primaryButtonLabel: 'Try Again',
+                primaryOnPressed: () {
+                  profileBloc.add(ProfileEvent());
                 },
-                child: const Text('Feedback'),
               ),
-              const SizedBox(width: 10),
-            ],
-          )
-        ],
-        title: Text(
-          "Profile",
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                color: primaryColor,
-                fontWeight: FontWeight.w500,
+            );
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: secondaryColor,
+            appBar: AppBar(
+              backgroundColor: secondaryColor,
+              elevation: 0,
+              centerTitle: true,
+              leading: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(
+                  Icons.arrow_back_ios,
+                  color: primaryColor,
+                ),
               ),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Hi,",
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  color: primaryColor,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                      ),
-                      const SizedBox(
-                        height: 2.5,
-                      ),
-                      Text(
-                        "Akash Raj K",
-                        style:
-                            Theme.of(context).textTheme.headlineSmall!.copyWith(
-                                  color: primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => CustomAlertDialog(
-                        title: 'Logout?',
-                        message: 'Are you sure you want to logout?',
-                        primaryButtonLabel: 'Logout',
-                        primaryOnPressed: () {},
-                        secondaryButtonLabel: 'Cancel',
-                      ),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.logout,
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Text(
-              "Your total donation is",
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: primaryColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              "60000",
-              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                    color: primaryColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              "your donation history",
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: primaryColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: ProfileCustomButton(
-                    text: "Request",
-                    isActive: _tabController.index == 0,
-                    onTap: () {
-                      _tabController.animateTo(0);
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: ProfileCustomButton(
-                    text: "Organization",
-                    isActive: _tabController.index == 1,
-                    onTap: () {
-                      _tabController.animateTo(1);
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Expanded(
-              child: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _tabController,
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: List.generate(
-                            20,
-                            (index) => const CustomAmountBox(
-                                  label: "Request",
-                                  amount: "\$30",
-                                )),
-                      ),
+              actions: [
+                Row(
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => const CustomDialog(
+                            label: 'FeedBack',
+                          ),
+                        );
+                      },
+                      child: const Text('Feedback'),
                     ),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: List.generate(
-                            20,
-                            (index) => const CustomAmountBox(
-                                  label: "Organization",
-                                  amount: "\$50",
-                                )),
-                      ),
+                    const SizedBox(width: 10),
+                  ],
+                )
+              ],
+              title: Text(
+                "Profile",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: primaryColor,
+                      fontWeight: FontWeight.w500,
                     ),
-                  ),
-                ],
               ),
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: CustomButton(
-          text: "Support us",
-          onTap: () {},
-        ),
+            body: state is ProfileSuccessState
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Hi,",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall!
+                                        .copyWith(
+                                          color: primaryColor,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  ),
+                                  const SizedBox(
+                                    height: 2.5,
+                                  ),
+                                  Text(
+                                    state.profileDetails['user_name'],
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineLarge!
+                                        .copyWith(
+                                          color: primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => CustomAlertDialog(
+                                title: 'Logout?',
+                                message: 'Are you sure you want to logout?',
+                                primaryButtonLabel: 'Logout',
+                                primaryOnPressed: () {},
+                                secondaryButtonLabel: 'Cancel',
+                              ),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.logout,
+                            color: Colors.grey[500],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          "Your total request donation is",
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    color: primaryColor,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          state.profileDetails['req_pay'].toString(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .copyWith(
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "Your total oraganisation donation is",
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    color: primaryColor,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          state.profileDetails['org_pay'].toString(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .copyWith(
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
+                    ),
+                  )
+                : const Center(
+                    child: CupertinoActivityIndicator(),
+                  ),
+          );
+        },
       ),
     );
   }
