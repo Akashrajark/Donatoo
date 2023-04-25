@@ -75,16 +75,16 @@ class CustomActionButton extends StatelessWidget {
                             color: buttonType == ButtonType.primary
                                 ? secondaryColor
                                 : color,
-                            fontWeight: FontWeight.normal,
+                            fontWeight: FontWeight.bold,
                           ),
                     ),
-                    const SizedBox(width: 5),
+                    const SizedBox(width: 2.5),
                     Icon(
                       iconData,
                       color: buttonType == ButtonType.primary
                           ? secondaryColor
                           : color,
-                      size: 16,
+                      size: 18,
                     ),
                   ],
                 ),

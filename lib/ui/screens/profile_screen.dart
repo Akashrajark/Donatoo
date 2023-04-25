@@ -1,3 +1,4 @@
+import 'package:donatoo/ui/widget/custom_alert_dialog.dart';
 import 'package:donatoo/ui/widget/custom_dialog.dart';
 import 'package:donatoo/values/colors.dart';
 import 'package:donatoo/values/constants.dart';
@@ -44,67 +45,83 @@ class _ProfileScreenState extends State<ProfileScreen>
           ),
         ),
         actions: [
-          PopupMenuButton(
-            color: primaryColor,
-            itemBuilder: (BuildContext context) => [
-              PopupMenuItem(
-                value: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => const CustomDialog(
-                              label: 'FeedBack',
-                            ));
-                  },
-                  child: Text(
-                    "FeedBack",
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                  ),
-                ),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => const CustomDialog(
+                      label: 'FeedBack',
+                    ),
+                  );
+                },
+                child: const Text('Feedback'),
               ),
-              PopupMenuItem(
-                value: 1,
-                child: Text(
-                  "About us",
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-              ),
+              const SizedBox(width: 10),
             ],
-          ),
+          )
         ],
         title: Text(
           "Profile",
-          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: primaryColor,
                 fontWeight: FontWeight.w500,
               ),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Akashraj k",
-              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                    color: primaryColor,
-                    fontWeight: FontWeight.w500,
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Hi,",
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  color: primaryColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                      ),
+                      const SizedBox(
+                        height: 2.5,
+                      ),
+                      Text(
+                        "Akash Raj K",
+                        style:
+                            Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                  color: primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
+                    ],
                   ),
-            ),
-            Text(
-              "+91 1234567890",
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: primaryColor,
-                    fontWeight: FontWeight.w500,
+                ),
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => CustomAlertDialog(
+                        title: 'Logout?',
+                        message: 'Are you sure you want to logout?',
+                        primaryButtonLabel: 'Logout',
+                        primaryOnPressed: () {},
+                        secondaryButtonLabel: 'Cancel',
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.logout,
+                    color: Colors.grey[500],
                   ),
+                ),
+              ],
             ),
             const SizedBox(
               height: 30,

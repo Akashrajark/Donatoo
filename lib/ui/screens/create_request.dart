@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:donatoo/bloc/manage_requests/manage_requests_bloc.dart';
 import 'package:donatoo/ui/screens/homescreen.dart';
 import 'package:donatoo/ui/screens/request_page.dart';
@@ -125,32 +126,55 @@ class _CreateRequestState extends State<CreateRequest> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 220,
-              width: MediaQuery.of(context).size.width,
-              child: Material(
-                child: InkWell(
-                  onTap: () async {
-                    PlatformFile? selectedFile = await pickFile();
-                    if (selectedFile != null) {
-                      file = selectedFile;
-                      setState(() {});
-                    }
-                  },
+            Material(
+              child: InkWell(
+                onTap: () async {
+                  PlatformFile? selectedFile = await pickFile();
+                  if (selectedFile != null) {
+                    file = selectedFile;
+                    setState(() {});
+                  }
+                },
+                child: SizedBox(
+                  height: 220,
                   child: Align(
                     alignment: Alignment.center,
                     child: file != null
-                        ? Image.file(File(file!.path!))
+                        ? Image.file(
+                            File(file!.path!),
+                            width: double.infinity,
+                            height: 220,
+                            fit: BoxFit.cover,
+                          )
                         : widget.details != null
-                            ? Image.network(widget.details!['image'])
-                            : Text(
-                                "Add image",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .copyWith(
-                                      color: primaryColor,
+                            ? CachedNetworkImage(
+                                imageUrl: widget.details!['image'],
+                                width: double.infinity,
+                                height: 220,
+                                fit: BoxFit.cover,
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.only(top: 40),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "Upload image",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge!
+                                          .copyWith(
+                                            color: primaryColor,
+                                          ),
                                     ),
+                                    const SizedBox(height: 5),
+                                    Icon(
+                                      Icons.upload_outlined,
+                                      color: Colors.grey[500],
+                                      size: 30,
+                                    )
+                                  ],
+                                ),
                               ),
                   ),
                 ),

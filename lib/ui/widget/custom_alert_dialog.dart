@@ -1,3 +1,4 @@
+import 'package:donatoo/ui/widget/custom_small_button.dart';
 import 'package:donatoo/values/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -88,6 +89,7 @@ class CustomAlertDialog extends StatelessWidget {
                       secondaryButtonLabel != null
                           ? Expanded(
                               child: CustomButton(
+                                buttonType: ButtonType.secondary,
                                 text: secondaryButtonLabel ?? '',
                                 onTap: secondaryOnPressed ??
                                     () {

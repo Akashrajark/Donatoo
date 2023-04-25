@@ -39,7 +39,7 @@ class _RequestState extends State<Request> {
           }
         },
         builder: (context, state) {
-          return Column(
+          return ListView(
             children: [
               const ImageTextBox(
                 image:
@@ -47,42 +47,41 @@ class _RequestState extends State<Request> {
                 title: "Requests",
                 iconData: Icons.playlist_add_check_rounded,
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(
-                    child: state is ManageOwnRequestsSuccessState
-                        ? state.requests.isNotEmpty
-                            ? Wrap(
-                                runSpacing: 10,
-                                children: List<Widget>.generate(
-                                  state.requests.length,
-                                  (index) => EmergencyCard(
-                                    emergencyRequestDetail:
-                                        state.requests[index],
-                                    manageRequestBloc: widget.manageRequestBloc,
-                                  ),
-                                ),
-                              )
-                            : const Center(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                  ),
-                                  child: Text('No Requests found!'),
-                                ),
-                              )
-                        : state is ManageRequestsLoadingState
-                            ? const Center(
-                                child: Padding(
-                                  padding: EdgeInsets.all(50.0),
-                                  child: CupertinoActivityIndicator(),
-                                ),
-                              )
-                            : const SizedBox(),
-                  ),
-                ),
-              ),
+              state is ManageOwnRequestsSuccessState
+                  ? state.requests.isNotEmpty
+                      ? ListView.separated(
+                          padding: const EdgeInsets.only(
+                            left: 15,
+                            right: 15,
+                            top: 15,
+                            bottom: 100,
+                          ),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) => EmergencyCard(
+                            emergencyRequestDetail: state.requests[index],
+                            manageRequestBloc: widget.manageRequestBloc,
+                          ),
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 10),
+                          itemCount: state.requests.length,
+                        )
+                      : const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 50,
+                            ),
+                            child: Text('No Requests found!'),
+                          ),
+                        )
+                  : state is ManageRequestsLoadingState
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(50.0),
+                            child: CupertinoActivityIndicator(),
+                          ),
+                        )
+                      : const SizedBox(),
             ],
           );
         },

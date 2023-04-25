@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:donatoo/bloc/manage_requests/manage_requests_bloc.dart';
 import 'package:donatoo/ui/screens/request_detail_screen.dart';
+import 'package:donatoo/util/truncate_string.dart';
 import 'package:donatoo/values/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'custom_label.dart';
 
@@ -40,23 +42,33 @@ class EmergencyCard extends StatelessWidget {
             CachedNetworkImage(
               imageUrl: emergencyRequestDetail['image'],
               fit: BoxFit.cover,
-              // loadingBuilder: (context, child, loadingProgress) =>
-              //     const CupertinoActivityIndicator(),
+              progressIndicatorBuilder: (context, child, loadingProgress) =>
+                  const CupertinoActivityIndicator(),
+              height: 220,
+              width: double.infinity,
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 15,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(emergencyRequestDetail['title'],
-                      style: Theme.of(context).textTheme.headlineSmall),
                   const SizedBox(
-                    height: 3,
+                    height: 5,
                   ),
-                  Text(emergencyRequestDetail['description'],
-                      style: Theme.of(context).textTheme.bodyMedium),
+                  Text(emergencyRequestDetail['title'],
+                      style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(
-                    height: 10,
+                    height: 5,
+                  ),
+                  Text(
+                      truncateString(
+                          emergencyRequestDetail['description'], 100),
+                      style: Theme.of(context).textTheme.bodyMedium),
+                  const Divider(
+                    height: 30,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -93,31 +105,42 @@ class EmergencyCard extends StatelessWidget {
                     backgroundColor: Colors.black12,
                     color: Colors.lightGreen,
                   ),
-                  const SizedBox(
-                    height: 10,
+                  const Divider(
+                    height: 30,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Expanded(
+                        flex: 2,
                         child: CustomLabel(
                           titleText:
                               emergencyRequestDetail['fundedPercentage'] ??
-                                  '60',
-                          descriptionText: "funded",
+                                  '60%',
+                          descriptionText: "Funded",
                           color: Colors.lightGreen,
                         ),
                       ),
                       Expanded(
+                          flex: 2,
                           child: CustomLabel(
-                        titleText: emergencyRequestDetail['donaters'] ?? '22',
-                        descriptionText: "donaters",
-                      )),
+                            alignment: CrossAxisAlignment.start,
+                            titleText:
+                                emergencyRequestDetail['donaters'] ?? '22',
+                            descriptionText: "Donations",
+                            color: Colors.deepPurple,
+                          )),
                       Expanded(
-                        flex: 2,
+                        flex: 3,
                         child: CustomLabel(
-                          titleText: emergencyRequestDetail['timeleft'] ?? '11',
-                          descriptionText: "hours to go",
+                          alignment: CrossAxisAlignment.end,
+                          titleText: DateFormat('dd/MM/yyyy').format(
+                            DateTime.parse(
+                              emergencyRequestDetail['duedate'],
+                            ),
+                          ),
+                          descriptionText: "Due Date",
+                          color: Colors.deepOrange,
                         ),
                       ),
                     ],

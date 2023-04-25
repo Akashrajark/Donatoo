@@ -18,6 +18,7 @@ class ManageRequestBloc extends Bloc<ManageRequestsEvent, ManageRequestState> {
       try {
         SupabaseClient supabaseClient = Supabase.instance.client;
         SupabaseQueryBuilder queryTable = supabaseClient.from('request');
+        SupabaseQueryBuilder profileTable = supabaseClient.from('profile');
 
         if (event is GetAllRequestsEvent) {
           List<dynamic> tempReqs = [];
@@ -45,6 +46,12 @@ class ManageRequestBloc extends Bloc<ManageRequestsEvent, ManageRequestState> {
           List<Map<String, dynamic>> requests =
               tempReqs.map((e) => e as Map<String, dynamic>).toList();
 
+          for (int i = 0; i < requests.length; i++) {
+            requests[i]['user'] = await profileTable
+                .select('*')
+                .eq('user_id', requests[i]['user_id'])
+                .single();
+          }
           if (event.ownRequests) {
             emit(ManageOwnRequestsSuccessState(requests: requests));
           } else {
