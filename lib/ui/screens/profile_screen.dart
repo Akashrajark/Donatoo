@@ -179,7 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           height: 10,
                         ),
                         Text(
-                          state.profileDetails['req_pay'].toString(),
+                          (state.profileDetails['req_pay'] ?? 0).toString(),
                           style: Theme.of(context)
                               .textTheme
                               .headlineLarge!
@@ -203,7 +203,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           height: 10,
                         ),
                         Text(
-                          state.profileDetails['org_pay'].toString(),
+                          (state.profileDetails['org_pay'] ?? 0).toString(),
                           style: Theme.of(context)
                               .textTheme
                               .headlineLarge!

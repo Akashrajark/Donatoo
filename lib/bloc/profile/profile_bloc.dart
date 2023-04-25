@@ -20,6 +20,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             'search_user_id': supabaseClient.auth.currentUser!.id,
           },
         );
+        Logger().w(profileInfo);
         emit(ProfileSuccessState(profileDetails: profileInfo));
       } catch (e, s) {
         Logger().e('$e\n$s');
