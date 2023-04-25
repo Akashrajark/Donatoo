@@ -74,21 +74,24 @@ class EmergencyCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        emergencyRequestDetail['collected_amount'] != null
-                            ? emergencyRequestDetail['collected_amount']
-                                .toString()
-                            : '100',
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  color: Colors.lightGreen,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        '₹${emergencyRequestDetail['total_payment']}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(
+                              color: emergencyRequestDetail['total_payment'] /
+                                          (emergencyRequestDetail[
+                                                  'amount_required'] -
+                                              emergencyRequestDetail[
+                                                  'amount_collected']) <
+                                      .5
+                                  ? Colors.deepOrange
+                                  : Colors.green,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       Text(
-                        emergencyRequestDetail['amount_required'] != null
-                            ? emergencyRequestDetail['amount_required']
-                                .toString()
-                            : '1000',
+                        '₹${emergencyRequestDetail['amount_required'] - emergencyRequestDetail['amount_collected']}',
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
                                   color: Colors.grey,
@@ -100,10 +103,18 @@ class EmergencyCard extends StatelessWidget {
                   const SizedBox(
                     height: 5,
                   ),
-                  const LinearProgressIndicator(
-                    value: .5,
+                  LinearProgressIndicator(
+                    value: emergencyRequestDetail['total_payment'] /
+                        (emergencyRequestDetail['amount_required'] -
+                            emergencyRequestDetail['amount_collected']),
                     backgroundColor: Colors.black12,
-                    color: Colors.lightGreen,
+                    color: emergencyRequestDetail['total_payment'] /
+                                (emergencyRequestDetail['amount_required'] -
+                                    emergencyRequestDetail[
+                                        'amount_collected']) <
+                            .5
+                        ? Colors.deepOrange
+                        : Colors.green,
                   ),
                   const Divider(
                     height: 30,
@@ -115,18 +126,18 @@ class EmergencyCard extends StatelessWidget {
                         flex: 2,
                         child: CustomLabel(
                           titleText:
-                              emergencyRequestDetail['fundedPercentage'] ??
-                                  '60%',
+                              '${(((emergencyRequestDetail['total_payment'] / (emergencyRequestDetail['amount_required'] - emergencyRequestDetail['amount_collected'])) * 100) as double).round().toString()}%',
                           descriptionText: "Funded",
-                          color: Colors.lightGreen,
+                          color: Colors.green,
                         ),
                       ),
                       Expanded(
                           flex: 2,
                           child: CustomLabel(
                             alignment: CrossAxisAlignment.start,
-                            titleText:
-                                emergencyRequestDetail['donaters'] ?? '22',
+                            titleText: emergencyRequestDetail['payments']
+                                .length
+                                .toString(),
                             descriptionText: "Donations",
                             color: Colors.deepPurple,
                           )),

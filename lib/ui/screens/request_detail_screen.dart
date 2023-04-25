@@ -9,16 +9,86 @@ import 'package:donatoo/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../widget/custom_alert_dialog.dart';
 import '../widget/custom_label.dart';
 import '../widget/custom_dialog.dart';
 
-class RequestDetails extends StatelessWidget {
+class RequestDetails extends StatefulWidget {
   final Map<String, dynamic> details;
   final ManageRequestBloc manageRequestBloc;
   const RequestDetails(
       {super.key, required this.details, required this.manageRequestBloc});
+
+  @override
+  State<RequestDetails> createState() => _RequestDetailsState();
+}
+
+class _RequestDetailsState extends State<RequestDetails> {
+  final Razorpay _razorpay = Razorpay();
+  int amount = 0;
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    await showDialog(
+      context: context,
+      builder: (context) => const CustomAlertDialog(
+        title: 'Payment Success',
+        message: 'Thank you for the payment. Reopen the page to see changes',
+        primaryButtonLabel: 'Ok',
+      ),
+    );
+
+    widget.manageRequestBloc
+        .add(PayRequestEvent(requestId: widget.details['id'], amount: amount));
+
+    Navigator.pop(context);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Logger().e(response.error);
+    showDialog(
+      context: context,
+      builder: (context) => CustomAlertDialog(
+        title: 'Payment Failed',
+        message: response.message ?? 'Something went wrong, Please try again',
+        primaryButtonLabel: 'Ok',
+      ),
+    );
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet was selected
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  void makePayment() async {
+    // String orderId = await createOrder(widget.testDetails['total_price']);
+
+    var options = {
+      'key': 'rzp_test_j07YpjyCexi5xr',
+      'amount': amount * 100,
+      'name': 'Donatoo',
+      // 'order_id': orderId,
+      'description': widget.details['title'],
+      'prefill': {
+        'contact': '7012874004',
+        'email': Supabase.instance.client.auth.currentUser!.email,
+      }
+    };
+    Logger().w(options);
+    _razorpay.open(options);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +124,7 @@ class RequestDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CachedNetworkImage(
-              imageUrl: details['image'],
+              imageUrl: widget.details['image'],
               width: double.infinity,
               height: 220,
               fit: BoxFit.cover,
@@ -65,7 +135,7 @@ class RequestDetails extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    details['title'],
+                    widget.details['title'],
                     textAlign: TextAlign.start,
                     style: GoogleFonts.roboto(
                       textStyle:
@@ -93,7 +163,7 @@ class RequestDetails extends StatelessWidget {
                     height: 2,
                   ),
                   Text(
-                    details['user']['name'],
+                    widget.details['user']['name'],
                     textAlign: TextAlign.start,
                     style: GoogleFonts.roboto(
                       textStyle:
@@ -107,7 +177,7 @@ class RequestDetails extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    details['description'],
+                    widget.details['description'],
                     textAlign: TextAlign.start,
                     style: GoogleFonts.roboto(
                       textStyle:
@@ -126,15 +196,17 @@ class RequestDetails extends StatelessWidget {
                       Expanded(
                         flex: 3,
                         child: CustomLabel(
-                          titleText: "₹8,200",
-                          descriptionText: "of ₹200000",
-                          color: Colors.lightGreen,
+                          titleText: "₹${widget.details['total_payment']}",
+                          descriptionText:
+                              "of ₹${widget.details['amount_required'] - widget.details['amount_collected']}",
+                          color: Colors.green,
                         ),
                       ),
                       Expanded(
                           flex: 2,
                           child: CustomLabel(
-                            titleText: "24",
+                            titleText:
+                                widget.details['payments'].length.toString(),
                             descriptionText: "Donators",
                             color: Colors.deepPurple,
                           )),
@@ -142,8 +214,8 @@ class RequestDetails extends StatelessWidget {
                         flex: 3,
                         child: CustomLabel(
                           alignment: CrossAxisAlignment.end,
-                          titleText: DateFormat('dd/MM/yyyy')
-                              .format(DateTime.parse(details['duedate'])),
+                          titleText: DateFormat('dd/MM/yyyy').format(
+                              DateTime.parse(widget.details['duedate'])),
                           descriptionText: "Due Date",
                           color: Colors.deepOrange,
                         ),
@@ -151,12 +223,19 @@ class RequestDetails extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
-                  const LinearProgressIndicator(
-                    value: .5,
+                  LinearProgressIndicator(
+                    value: widget.details['total_payment'] /
+                        (widget.details['amount_required'] -
+                            widget.details['amount_collected']),
                     backgroundColor: Colors.black12,
-                    color: Colors.lightGreen,
+                    color: widget.details['total_payment'] /
+                                (widget.details['amount_required'] -
+                                    widget.details['amount_collected']) <
+                            .5
+                        ? Colors.deepOrange
+                        : Colors.green,
                   ),
                   const Divider(
                     height: 30,
@@ -176,7 +255,7 @@ class RequestDetails extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    details['patient_name'],
+                    widget.details['patient_name'],
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -203,7 +282,7 @@ class RequestDetails extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            details['patient_address_line'],
+                            widget.details['patient_address_line'],
                             textAlign: TextAlign.start,
                             style: GoogleFonts.roboto(
                               textStyle: Theme.of(context)
@@ -219,11 +298,11 @@ class RequestDetails extends StatelessWidget {
                             height: 2.5,
                           ),
                           Text(
-                            details['patient_place'] +
+                            widget.details['patient_place'] +
                                 ', ' +
-                                details['patient_district'] +
+                                widget.details['patient_district'] +
                                 ', ' +
-                                details['patient_state'],
+                                widget.details['patient_state'],
                             textAlign: TextAlign.start,
                             style: GoogleFonts.roboto(
                               textStyle: Theme.of(context)
@@ -239,7 +318,7 @@ class RequestDetails extends StatelessWidget {
                             height: 2.5,
                           ),
                           Text(
-                            details['patient_pincode'].toString(),
+                            widget.details['patient_pincode'].toString(),
                             textAlign: TextAlign.start,
                             style: GoogleFonts.roboto(
                               textStyle: Theme.of(context)
@@ -256,9 +335,13 @@ class RequestDetails extends StatelessWidget {
                     ],
                   ),
                   TextButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      final Uri url =
+                          Uri.parse('tel:' + widget.details['patient_phone']);
+                      launchUrl(url);
+                    },
                     icon: const Icon(Icons.call),
-                    label: Text(details['patient_phone']),
+                    label: Text(widget.details['patient_phone']),
                   ),
                   const SizedBox(height: 5),
                   const Divider(
@@ -280,7 +363,7 @@ class RequestDetails extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    details['hospital_name'],
+                    widget.details['hospital_name'],
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -307,7 +390,7 @@ class RequestDetails extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            details['hospital_address_line'],
+                            widget.details['hospital_address_line'],
                             textAlign: TextAlign.start,
                             style: GoogleFonts.roboto(
                               textStyle: Theme.of(context)
@@ -323,11 +406,11 @@ class RequestDetails extends StatelessWidget {
                             height: 2.5,
                           ),
                           Text(
-                            details['hospital_place'] +
+                            widget.details['hospital_place'] +
                                 ', ' +
-                                details['hospital_district'] +
+                                widget.details['hospital_district'] +
                                 ', ' +
-                                details['hospital_state'],
+                                widget.details['hospital_state'],
                             textAlign: TextAlign.start,
                             style: GoogleFonts.roboto(
                               textStyle: Theme.of(context)
@@ -343,7 +426,7 @@ class RequestDetails extends StatelessWidget {
                             height: 2.5,
                           ),
                           Text(
-                            details['hospital_pincode'].toString(),
+                            widget.details['hospital_pincode'].toString(),
                             textAlign: TextAlign.start,
                             style: GoogleFonts.roboto(
                               textStyle: Theme.of(context)
@@ -360,9 +443,13 @@ class RequestDetails extends StatelessWidget {
                     ],
                   ),
                   TextButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      final Uri url =
+                          Uri.parse('tel:' + widget.details['hospital_phone']);
+                      launchUrl(url);
+                    },
                     icon: const Icon(Icons.call),
-                    label: Text(details['hospital_phone']),
+                    label: Text(widget.details['hospital_phone']),
                   ),
                 ],
               ),
@@ -373,14 +460,28 @@ class RequestDetails extends StatelessWidget {
       bottomNavigationBar: Material(
         color: Colors.white,
         child: Padding(
-          padding:
-              details['status'] == 'pending' || details['status'] == 'active'
-                  ? const EdgeInsets.symmetric(horizontal: 10, vertical: 15)
-                  : EdgeInsets.zero,
-          child: details['user_id'] !=
+          padding: widget.details['status'] == 'pending' ||
+                  widget.details['status'] == 'active'
+              ? const EdgeInsets.symmetric(horizontal: 10, vertical: 15)
+              : EdgeInsets.zero,
+          child: widget.details['user_id'] !=
                   Supabase.instance.client.auth.currentUser!.id
-              ? CustomButton(text: "Donate", onTap: () {})
-              : details['status'] == 'pending' || details['status'] == 'active'
+              ? CustomButton(
+                  text: "Donate",
+                  onTap: () async {
+                    amount = (await showDialog(
+                          context: context,
+                          builder: (context) => const AmountForm(),
+                        )) ??
+                        0;
+
+                    if (amount != 0) {
+                      makePayment();
+                      Logger().w(amount.toString());
+                    }
+                  })
+              : widget.details['status'] == 'pending' ||
+                      widget.details['status'] == 'active'
                   ? Row(
                       children: [
                         Expanded(
@@ -392,8 +493,8 @@ class RequestDetails extends StatelessWidget {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (_) => CreateRequest(
-                                    manageRequestBloc: manageRequestBloc,
-                                    details: details,
+                                    manageRequestBloc: widget.manageRequestBloc,
+                                    details: widget.details,
                                   ),
                                 ),
                               );
@@ -409,9 +510,10 @@ class RequestDetails extends StatelessWidget {
                             iconData: Icons.done,
                             label: 'Completed',
                             onPressed: () {
-                              manageRequestBloc.add(UpdateRequestStatusEvent(
-                                  status: 'completed',
-                                  requestId: details['id']));
+                              widget.manageRequestBloc.add(
+                                  UpdateRequestStatusEvent(
+                                      status: 'completed',
+                                      requestId: widget.details['id']));
 
                               Navigator.pop(context);
                             },
@@ -426,8 +528,10 @@ class RequestDetails extends StatelessWidget {
                             iconData: Icons.close,
                             label: 'Close',
                             onPressed: () {
-                              manageRequestBloc.add(UpdateRequestStatusEvent(
-                                  status: 'closed', requestId: details['id']));
+                              widget.manageRequestBloc.add(
+                                  UpdateRequestStatusEvent(
+                                      status: 'closed',
+                                      requestId: widget.details['id']));
 
                               Navigator.pop(context);
                             },
@@ -438,6 +542,51 @@ class RequestDetails extends StatelessWidget {
                   : const SizedBox(),
         ),
       ),
+    );
+  }
+}
+
+class AmountForm extends StatefulWidget {
+  const AmountForm({
+    super.key,
+  });
+
+  @override
+  State<AmountForm> createState() => _AmountFormState();
+}
+
+class _AmountFormState extends State<AmountForm> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController _amountController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return CustomAlertDialog(
+      title: 'Enter Amount',
+      message: 'Enter the amount you wish to donate,',
+      content: Form(
+        key: formKey,
+        child: TextFormField(
+          controller: _amountController,
+          validator: (value) {
+            if (value != null && value.trim().isNotEmpty) {
+              return null;
+            } else {
+              return 'Enter amount to continue';
+            }
+          },
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(
+            prefixIcon: Icon(Icons.money),
+            hintText: 'Donation Amaount',
+          ),
+        ),
+      ),
+      primaryButtonLabel: 'Ok',
+      primaryOnPressed: () {
+        if (formKey.currentState!.validate()) {
+          Navigator.pop(context, int.parse(_amountController.text.trim()));
+        }
+      },
     );
   }
 }

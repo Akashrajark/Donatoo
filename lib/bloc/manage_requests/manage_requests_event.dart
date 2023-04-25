@@ -134,4 +134,10 @@ class UpdateRequestStatusEvent extends ManageRequestsEvent {
   });
 }
 
+class PayRequestEvent extends ManageRequestsEvent {
+  final int requestId, amount;
+
+  PayRequestEvent({required this.requestId, required this.amount});
+}
+
 //TODO: close status with reason

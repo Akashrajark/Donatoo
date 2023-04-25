@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../widget/custom_label.dart';
 import '../widget/custom_dialog.dart';
@@ -257,98 +258,112 @@ class _OrganizationDetailsState extends State<OrganizationDetails> {
                   const Divider(
                     height: 30,
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        Icons.email,
-                        color: Colors.deepPurple,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Email Address',
-                              textAlign: TextAlign.start,
-                              style: GoogleFonts.roboto(
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                      color: Colors.deepPurple,
-                                    ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 2.5,
-                            ),
-                            Text(
-                              widget.organisationDetails['email'],
-                              textAlign: TextAlign.start,
-                              style: GoogleFonts.roboto(
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                      color: Colors.black,
-                                    ),
-                              ),
-                            ),
-                          ],
+                  GestureDetector(
+                    onTap: () {
+                      final Uri url = Uri.parse(
+                          'mailto:' + widget.organisationDetails['email']);
+                      launchUrl(url);
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.email,
+                          color: Colors.deepPurple,
+                          size: 20,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 5),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Email Address',
+                                textAlign: TextAlign.start,
+                                style: GoogleFonts.roboto(
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                        color: Colors.deepPurple,
+                                      ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 2.5,
+                              ),
+                              Text(
+                                widget.organisationDetails['email'],
+                                textAlign: TextAlign.start,
+                                style: GoogleFonts.roboto(
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(
+                                        color: Colors.black,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const Divider(
                     height: 30,
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        Icons.phone,
-                        color: Colors.deepPurple,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 5),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Phone Number',
-                              textAlign: TextAlign.start,
-                              style: GoogleFonts.roboto(
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                      color: Colors.deepPurple,
-                                    ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 2.5,
-                            ),
-                            Text(
-                              widget.organisationDetails['phone'],
-                              textAlign: TextAlign.start,
-                              style: GoogleFonts.roboto(
-                                textStyle: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                      color: Colors.black,
-                                    ),
-                              ),
-                            ),
-                          ],
+                  GestureDetector(
+                    onTap: () {
+                      final Uri url = Uri.parse(
+                          'tel:' + widget.organisationDetails['phone']);
+                      launchUrl(url);
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.phone,
+                          color: Colors.deepPurple,
+                          size: 20,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 5),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Phone Number',
+                                textAlign: TextAlign.start,
+                                style: GoogleFonts.roboto(
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                        color: Colors.deepPurple,
+                                      ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 2.5,
+                              ),
+                              Text(
+                                widget.organisationDetails['phone'],
+                                textAlign: TextAlign.start,
+                                style: GoogleFonts.roboto(
+                                  textStyle: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(
+                                        color: Colors.black,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const Divider(
                     height: 30,

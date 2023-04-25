@@ -19,6 +19,8 @@ class ManageRequestBloc extends Bloc<ManageRequestsEvent, ManageRequestState> {
         SupabaseClient supabaseClient = Supabase.instance.client;
         SupabaseQueryBuilder queryTable = supabaseClient.from('request');
         SupabaseQueryBuilder profileTable = supabaseClient.from('profile');
+        SupabaseQueryBuilder paymentsTable =
+            supabaseClient.from('request_payments');
 
         if (event is GetAllRequestsEvent) {
           List<dynamic> tempReqs = [];
@@ -51,7 +53,20 @@ class ManageRequestBloc extends Bloc<ManageRequestsEvent, ManageRequestState> {
                 .select('*')
                 .eq('user_id', requests[i]['user_id'])
                 .single();
+
+            requests[i]['payments'] = await paymentsTable
+                .select('*')
+                .eq('request_id', requests[i]['id'])
+                .order('created_at');
+            requests[i]['total_payment'] = 0;
+            for (int j = 0; j < requests[i]['payments'].length; j++) {
+              requests[i]['total_payment'] +=
+                  requests[i]['payments'][j]['amount'];
+            }
           }
+
+          Logger().wtf(requests);
+
           if (event.ownRequests) {
             emit(ManageOwnRequestsSuccessState(requests: requests));
           } else {
@@ -140,6 +155,13 @@ class ManageRequestBloc extends Bloc<ManageRequestsEvent, ManageRequestState> {
           await queryTable
               .update({'status': event.status}).eq('id', event.requestId);
           add(GetAllRequestsEvent(ownRequests: true));
+        } else if (event is PayRequestEvent) {
+          await paymentsTable.insert({
+            'user_id': supabaseClient.auth.currentUser!.id,
+            'amount': event.amount,
+            'request_id': event.requestId,
+          });
+          add(GetAllRequestsEvent());
         }
       } catch (e, s) {
         Logger().e('$e\n$s');
