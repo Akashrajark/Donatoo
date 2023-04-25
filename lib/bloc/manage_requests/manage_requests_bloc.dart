@@ -21,6 +21,8 @@ class ManageRequestBloc extends Bloc<ManageRequestsEvent, ManageRequestState> {
         SupabaseQueryBuilder profileTable = supabaseClient.from('profile');
         SupabaseQueryBuilder paymentsTable =
             supabaseClient.from('request_payments');
+        SupabaseQueryBuilder reportTable =
+            supabaseClient.from('request_report');
 
         if (event is GetAllRequestsEvent) {
           List<dynamic> tempReqs = [];
@@ -160,6 +162,13 @@ class ManageRequestBloc extends Bloc<ManageRequestsEvent, ManageRequestState> {
             'user_id': supabaseClient.auth.currentUser!.id,
             'amount': event.amount,
             'request_id': event.requestId,
+          });
+          add(GetAllRequestsEvent());
+        } else if (event is ReportRequestEvent) {
+          await reportTable.insert({
+            'user_id': supabaseClient.auth.currentUser!.id,
+            'reason': event.reason,
+            'request_id': event.id,
           });
           add(GetAllRequestsEvent());
         }

@@ -21,6 +21,8 @@ class ManageOrganizationsBloc
         SupabaseQueryBuilder queryTable = supabaseClient.from('organizations');
         SupabaseQueryBuilder paymentsTable =
             supabaseClient.from('organization_payments');
+        SupabaseQueryBuilder reportOrganisationTable =
+            supabaseClient.from('organization_report');
 
         if (event is GetAllOrganizationEvent) {
           List<dynamic> tempOrgs = [];
@@ -59,6 +61,13 @@ class ManageOrganizationsBloc
           await paymentsTable.insert({
             'user_id': supabaseClient.auth.currentUser!.id,
             'amount': event.amount,
+            'organization_id': event.id,
+          });
+          add(GetAllOrganizationEvent());
+        } else if (event is ReportOrganizationEvent) {
+          await reportOrganisationTable.insert({
+            'user_id': supabaseClient.auth.currentUser!.id,
+            'reason': event.reason,
             'organization_id': event.id,
           });
           add(GetAllOrganizationEvent());

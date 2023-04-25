@@ -140,4 +140,12 @@ class PayRequestEvent extends ManageRequestsEvent {
   PayRequestEvent({required this.requestId, required this.amount});
 }
 
-//TODO: close status with reason
+class ReportRequestEvent extends ManageRequestsEvent {
+  final int id;
+  final String reason;
+
+  ReportRequestEvent({
+    required this.id,
+    required this.reason,
+  });
+}

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:donatoo/bloc/manage_organizations/manage_organizations_bloc.dart';
 import 'package:donatoo/ui/widget/custom_alert_dialog.dart';
 import 'package:donatoo/ui/widget/custom_button.dart';
+import 'package:donatoo/util/value_validators.dart';
 import 'package:donatoo/values/colors.dart';
 import 'package:donatoo/values/constants.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../widget/custom_label.dart';
 import '../widget/custom_dialog.dart';
+import '../widget/custom_small_button.dart';
 
 class OrganizationDetails extends StatefulWidget {
   final dynamic organisationDetails;
@@ -119,7 +121,10 @@ class _OrganizationDetailsState extends State<OrganizationDetails> {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (context) => const CustomDialog(),
+                    builder: (context) => OrganisationReportDialog(
+                      organisationDetails: widget.organisationDetails,
+                      manageOrganizationsBloc: widget.manageOrganizationsBloc,
+                    ),
                   );
                 },
                 color: Colors.deepOrange,
@@ -455,6 +460,124 @@ class _AmountFormState extends State<AmountForm> {
           Navigator.pop(context, int.parse(_amountController.text.trim()));
         }
       },
+    );
+  }
+}
+
+class OrganisationReportDialog extends StatefulWidget {
+  final ManageOrganizationsBloc manageOrganizationsBloc;
+  final dynamic organisationDetails;
+  const OrganisationReportDialog({
+    super.key,
+    required this.manageOrganizationsBloc,
+    required this.organisationDetails,
+  });
+
+  @override
+  State<OrganisationReportDialog> createState() =>
+      _OrganisationReportDialogState();
+}
+
+class _OrganisationReportDialogState extends State<OrganisationReportDialog> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final TextEditingController _reasonController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(borderRadius),
+      ),
+      child: SizedBox(
+        height: 200,
+        child: Material(
+          color: secondaryColor,
+          borderRadius: BorderRadius.circular(borderRadius),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Report Organisation',
+                    style: GoogleFonts.roboto(
+                      textStyle:
+                          Theme.of(context).textTheme.titleMedium!.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: primaryColor,
+                              ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    maxLines: 4,
+                    controller: _reasonController,
+                    validator: alphabeticWithSpaceValidator,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: "Details",
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 10,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(borderRadius)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black26,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(borderRadius),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomSmallButton(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        text: "Cancel",
+                        buttonType: ButtonType.secondary,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      CustomSmallButton(
+                        onTap: () {
+                          if (formKey.currentState!.validate()) {
+                            widget.manageOrganizationsBloc.add(
+                              ReportOrganizationEvent(
+                                id: widget.organisationDetails['id'],
+                                reason: _reasonController.text.trim(),
+                              ),
+                            );
+                            Navigator.pop(context);
+                          }
+                        },
+                        text: 'Report',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

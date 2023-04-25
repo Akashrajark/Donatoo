@@ -19,3 +19,13 @@ class PayOrganizationEvent extends ManageOrganizationsEvent {
     required this.amount,
   });
 }
+
+class ReportOrganizationEvent extends ManageOrganizationsEvent {
+  final int id;
+  final String reason;
+
+  ReportOrganizationEvent({
+    required this.id,
+    required this.reason,
+  });
+}
