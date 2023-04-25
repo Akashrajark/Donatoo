@@ -471,7 +471,11 @@ class _RequestDetailsState extends State<RequestDetails> {
                   onTap: () async {
                     amount = (await showDialog(
                           context: context,
-                          builder: (context) => const AmountForm(),
+                          builder: (context) => AmountForm(
+                            limit: widget.details['amount_required'] -
+                                widget.details['amount_collected'] -
+                                widget.details['total_payment'],
+                          ),
                         )) ??
                         0;
 
@@ -547,8 +551,10 @@ class _RequestDetailsState extends State<RequestDetails> {
 }
 
 class AmountForm extends StatefulWidget {
+  final int limit;
   const AmountForm({
     super.key,
+    required this.limit,
   });
 
   @override
@@ -569,7 +575,11 @@ class _AmountFormState extends State<AmountForm> {
           controller: _amountController,
           validator: (value) {
             if (value != null && value.trim().isNotEmpty) {
-              return null;
+              if (int.parse(value) <= widget.limit) {
+                return null;
+              } else {
+                return 'Amount cannot be greater than ${widget.limit}';
+              }
             } else {
               return 'Enter amount to continue';
             }
