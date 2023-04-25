@@ -71,22 +71,22 @@ class _ProfileScreenState extends State<ProfileScreen>
                 ),
               ),
               actions: [
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => const CustomDialog(
-                            label: 'FeedBack',
-                          ),
-                        );
-                      },
-                      child: const Text('Feedback'),
-                    ),
-                    const SizedBox(width: 10),
-                  ],
-                )
+                // Row(
+                //   children: [
+                //     TextButton(
+                //       onPressed: () {
+                //         showDialog(
+                //           context: context,
+                //           builder: (context) => const CustomDialog(
+                //             label: 'FeedBack',
+                //           ),
+                //         );
+                //       },
+                //       child: const Text('Feedback'),
+                //     ),
+                //     const SizedBox(width: 10),
+                //   ],
+                // )
               ],
               title: Text(
                 "Profile",
