@@ -58,7 +58,9 @@ class _HomeScreenState extends State<HomeScreen>
           physics: const NeverScrollableScrollPhysics(),
           controller: _tabController,
           children: [
-            const Emergency(),
+            Emergency(
+              manageRequestBloc: manageRequestBloc,
+            ),
             const Organization(),
             Request(
               manageRequestBloc: manageRequestBloc,
